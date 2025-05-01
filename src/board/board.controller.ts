@@ -1,19 +1,23 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Injectable, Param, Post, Put } from '@nestjs/common';
+import { BoardService } from './board.service';
 
 @Controller('board')
 export class BoardController {
 
+    constructor(
+        private readonly boardService: BoardService
+    ) {}
 
     @Get()
     findAll() {
-        return 'findAll';   
+        return this.boardService.findAll();   
     }
 
     @Get(':id')
     find(
-        @Param('id') id: number
+        @Param('id') id: string
     ) {
-        return `find ${id}`;   
+        return this.boardService.find(id);   
     }
 
     @Post()
