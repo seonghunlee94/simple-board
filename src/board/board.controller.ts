@@ -32,7 +32,7 @@ export class BoardController {
         @Param('id') id: number,
         @Body() data
     ) {
-        return `update ${id}`;   
+        return this.boardService.update(Number(id), data);   
     }
 
     @Delete(':id')

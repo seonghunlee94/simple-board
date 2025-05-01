@@ -31,7 +31,7 @@ export class BoardService {
     }
 
     find(id: number) {
-        const index = this.boards.findIndex(board => board.id === id);  
+        const index = this.getBoard(id);  
         return this.boards[index]; 
     }
 
@@ -48,13 +48,21 @@ export class BoardService {
     }
 
     update(id: number, data) {
-        return `update ${id}`;   
+        const index = this.getBoard(id);
+        if (index > -1) {
+            this.boards[index] = { ...this.boards[index], ...data };
+            return this.boards[index];
+        }
+        return null;
     }
 
     remove(id: number) {
         return `remove ${id}`;   
     }
 
+    getBoard(id: number) {
+        return this.boards.findIndex(board => board.id === id);   
+    }
 
 
 }

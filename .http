@@ -9,10 +9,22 @@ GET http://localhost:3000/board/6
 
 ###
 
+# 게시글 생성하기
 POST http://localhost:3000/board
 Content-Type: application/json
 
 {
-  "name": "FastCampus",
-  "content": "contents 5"
+  "title": "study1",
+  "content": "contents study1"
+}
+
+###
+
+# 게시글 수정하기
+PUT http://localhost:3000/board/4
+Content-Type: application/json
+
+{
+  "title": "study2",
+  "content": "contents 4"
 }
