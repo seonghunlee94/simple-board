@@ -5,7 +5,14 @@ GET http://localhost:3000/board
 ###
 
 # 게시글 하나 가져오기
-GET http://localhost:3000/board/1
+GET http://localhost:3000/board/6
 
 ###
 
+POST http://localhost:3000/board
+Content-Type: application/json
+
+{
+  "name": "FastCampus",
+  "content": "contents 5"
+}
