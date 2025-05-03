@@ -5,7 +5,7 @@ GET http://localhost:3000/board
 ###
 
 # 게시글 하나 가져오기
-GET http://localhost:3000/board/6
+GET http://localhost:3000/board/2
 
 ###
 
@@ -25,6 +25,13 @@ PUT http://localhost:3000/board/4
 Content-Type: application/json
 
 {
-  "title": "study2",
-  "content": "contents 4"
+  "title": "change title"
 }
+
+###
+
+# 게시글 삭제하기
+DELETE http://localhost:3000/board/4
+
+###
+GET http://localhost:3000
