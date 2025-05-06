@@ -1,7 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { CreateBoardDto } from './dto/create-board.dto';
+import { UpdateBoardDto } from './dto/update-board.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { User } from 'src/entity/user.entity';
+import { Board } from 'src/entity/board.entity';
 
 @Injectable()
 export class BoardService {
+
+    constructor(
+        @InjectRepository(User)
+        private userRepository: Repository<User>,
+
+        @InjectRepository(Board)
+        private boardRepository: Repository<Board>,
+    ) {}
 
     private boards = [
         {
@@ -26,16 +40,27 @@ export class BoardService {
         },
     ];
 
-    findAll() {
-        return this.boards;   
+    async findAll() {
+        return this.boardRepository.find();   
     }
 
-    find(id: number) {
-        const index = this.getBoard(id);  
-        return this.boards[index]; 
+    async find(id: number) {
+        const board = await this.boardRepository.findOne({
+            where: {
+                id
+            },
+            relations: {
+                user: true,
+            }
+        }); 
+
+        if (!board) {
+            throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+        }
+        return board;
     }
 
-    create(data) {
+    create(data: CreateBoardDto) {
         const newBoard = {
             id: this.getNextId(), ...data
         };
@@ -47,7 +72,7 @@ export class BoardService {
         return this.boards.sort((a, b) => b.id - a.id)[0].id + 1;
     }
 
-    update(id: number, data) {
+    update(id: number, data: UpdateBoardDto) {
         const index = this.getBoard(id);
         if (index > -1) {
             this.boards[index] = { ...this.boards[index], ...data };
@@ -57,7 +82,13 @@ export class BoardService {
     }
 
     remove(id: number) {
-        return `remove ${id}`;   
+        const index = this.getBoard(id);
+        if (index > -1) {
+            const deleteBoard = this.boards[index];
+            this.boards.splice(index, 1);
+            return deleteBoard;
+        }
+        return null;  
     }
 
     getBoard(id: number) {
